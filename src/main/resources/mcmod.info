@@ -1,16 +1,21 @@
 [
 {
-  "modid": "thaumcraftneifix",
-  "name": "Thaumcraft NEI Plugin Fix",
-  "description": "Fixes for NEI Integration for Thaumcraft 4.",
+  "modid": "tcneiadditions",
+  "name": "Thaumcraft NEI Additions",
+  "description": "Fixes for NEI Plugin for Thaumcraft 4.",
   "version": "1.7.10-1.0",
   "mcversion": "1.7.10",
   "url": "",
   "updateUrl": "",
-  "authorList": ["Time_Conqueror"],
+  "authorList": [
+    "Time_Conqueror"
+  ],
   "credits": "",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": ["Thaumcraft", "thaumcraftneiplugin"]
+  "dependencies": [
+    "Thaumcraft",
+    "thaumcraftneiplugin"
+  ]
 }
 ]

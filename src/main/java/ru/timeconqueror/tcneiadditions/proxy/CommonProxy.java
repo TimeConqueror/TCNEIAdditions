@@ -1,4 +1,4 @@
-package ru.timeconqueror.thaumcraftneifix.proxy;
+package ru.timeconqueror.tcneiadditions.proxy;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;

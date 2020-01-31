@@ -1,4 +1,4 @@
-package ru.timeconqueror.thaumcraftneifix;
+package ru.timeconqueror.tcneiadditions;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -7,23 +7,23 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.timeconqueror.thaumcraftneifix.proxy.CommonProxy;
+import ru.timeconqueror.tcneiadditions.proxy.CommonProxy;
 
-@Mod(modid = TCNEIPluginFix.MODID,
-        name = TCNEIPluginFix.NAME,
-        version = TCNEIPluginFix.VERSION,
+@Mod(modid = TCNEIAdditions.MODID,
+        name = TCNEIAdditions.NAME,
+        version = TCNEIAdditions.VERSION,
         dependencies = "required-after:Thaumcraft;required-after:thaumcraftneiplugin")
-public class TCNEIPluginFix {
-    public static final String MODID = "thaumcraftneifix";
-    public static final String NAME = "Thaumcraft NEI Plugin Fix";
+public class TCNEIAdditions {
+    public static final String MODID = "tcneiadditions";
+    public static final String NAME = "Thaumcraft NEI Additions";
     public static final String VERSION = "@VERSION@";
 
-    public static final Logger LOGGER = LogManager.getLogger(TCNEIPluginFix.class);
+    public static final Logger LOGGER = LogManager.getLogger(NAME);
 
-    @Mod.Instance(value = TCNEIPluginFix.MODID)
-    public static TCNEIPluginFix instance;
+    @Mod.Instance(value = TCNEIAdditions.MODID)
+    public static TCNEIAdditions instance;
 
-    @SidedProxy(clientSide = "ru.timeconqueror.thaumcraftneifix.proxy.ClientProxy", serverSide = "ru.timeconqueror.thaumcraftneifix.proxy.ServerProxy")
+    @SidedProxy(clientSide = "ru.timeconqueror.tcneiadditions.proxy.ClientProxy", serverSide = "ru.timeconqueror.tcneiadditions.proxy.ServerProxy")
     public static CommonProxy proxy;
 
     @Mod.EventHandler

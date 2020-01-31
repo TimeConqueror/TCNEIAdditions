@@ -1,4 +1,4 @@
-package ru.timeconqueror.thaumcraftneifix;
+package ru.timeconqueror.tcneiadditions;
 
 import codechicken.nei.NEIClientConfig;
 import codechicken.nei.recipe.GuiUsageRecipe;
@@ -56,10 +56,8 @@ public class StuffRemovingThread extends Thread {
                         IUsageHandler next = iterator.next();
                         if (next instanceof AspectRecipeHandler) {
 
-                            System.out.println(GuiUsageRecipe.usagehandlers);
                             iterator.remove();
-                            TCNEIPluginFix.LOGGER.info("Found and removed standard Thaumcraft NEI Plugin aspect usage info.");
-                            System.out.println(GuiUsageRecipe.usagehandlers);
+                            TCNEIAdditions.LOGGER.info("Found and removed standard Thaumcraft NEI Plugin Aspect Usage GuiRecipe.");
                         }
                     }
 

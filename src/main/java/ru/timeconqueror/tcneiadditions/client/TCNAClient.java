@@ -1,4 +1,4 @@
-package ru.timeconqueror.thaumcraftneifix.client;
+package ru.timeconqueror.tcneiadditions.client;
 
 import com.google.common.collect.Queues;
 import com.google.common.util.concurrent.Futures;
@@ -15,11 +15,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
-public class TNPFClient {
-    private static final TNPFClient instance = new TNPFClient();
+public class TCNAClient {
+    private static final TCNAClient instance = new TCNAClient();
     private final Queue<FutureTask<?>> tasks = Queues.newArrayDeque();
 
-    public static TNPFClient getInstance() {
+    public static TCNAClient getInstance() {
         return instance;
     }
 
