@@ -5,13 +5,12 @@ import codechicken.nei.recipe.GuiUsageRecipe;
 import codechicken.nei.recipe.IUsageHandler;
 import ru.timeconqueror.thaumcraftneifix.TCNEIPluginFix;
 
-public class NEITCConfig
+public class NEIConfig
         implements IConfigureNEI {
 
     @Override
     public void loadConfig() {
 //        API.registerRecipeHandler();
-        new Exception().printStackTrace();
         for (IUsageHandler usagehandler : GuiUsageRecipe.usagehandlers) {
             System.out.println(usagehandler.getClass());
         }

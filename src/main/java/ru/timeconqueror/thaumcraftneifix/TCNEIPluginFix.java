@@ -5,6 +5,8 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.timeconqueror.thaumcraftneifix.proxy.CommonProxy;
 
 @Mod(modid = TCNEIPluginFix.MODID,
@@ -15,6 +17,8 @@ public class TCNEIPluginFix {
     public static final String MODID = "thaumcraftneifix";
     public static final String NAME = "Thaumcraft NEI Plugin Fix";
     public static final String VERSION = "@VERSION@";
+
+    public static final Logger LOGGER = LogManager.getLogger(TCNEIPluginFix.class);
 
     @Mod.Instance(value = TCNEIPluginFix.MODID)
     public static TCNEIPluginFix instance;
