@@ -4,8 +4,8 @@ import codechicken.nei.NEIClientConfig;
 import codechicken.nei.recipe.GuiUsageRecipe;
 import codechicken.nei.recipe.IUsageHandler;
 import com.djgiannuzz.thaumcraftneiplugin.nei.recipehandler.AspectRecipeHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.Timer;
+import ru.timeconqueror.tcneiadditions.client.TCNAClient;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -44,7 +44,7 @@ public class StuffRemovingThread extends Thread {
     }
 
     private void onTick() {
-        Minecraft.getMinecraft().func_152344_a(() -> {
+        TCNAClient.getInstance().addScheduledTask(() -> {
             try {
 
                 boolean configLoaded = (boolean) configLoadedField.get(null);

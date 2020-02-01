@@ -1,1 +1,2 @@
 tcneiadditions.aspect_from_itemstack.title=Аспект из ItemStack
+tcneiadditions.aspect_from_itemstack.still_load=Ещё загружаем... (%s/%s)

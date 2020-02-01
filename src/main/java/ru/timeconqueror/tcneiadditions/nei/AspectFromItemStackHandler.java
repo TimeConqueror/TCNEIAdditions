@@ -10,18 +10,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import ru.timeconqueror.tcneiadditions.TCNEIAdditions;
+import ru.timeconqueror.tcneiadditions.client.ThaumcraftHooks;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.client.gui.GuiResearchRecipe;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static codechicken.lib.gui.GuiDraw.changeTexture;
-import static codechicken.lib.gui.GuiDraw.drawTexturedModalRect;
+import static codechicken.lib.gui.GuiDraw.*;
 
 public class AspectFromItemStackHandler extends TemplateRecipeHandler {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(TCNEIAdditions.MODID, "textures/gui/itemstack_background.png");
@@ -33,9 +34,12 @@ public class AspectFromItemStackHandler extends TemplateRecipeHandler {
     private static final int STACKS_OVERLAY_START_X = GUI_WIDTH / 2 - STACKS_OVERLAY_WIDTH / 2;
     private static final int STACKS_OVERLAY_START_Y = GUI_HEIGHT - STACKS_OVERLAY_HEIGHT;
     private String playerName;
+    private int ticks;
+    private boolean dataFullLoadedState;
 
     public AspectFromItemStackHandler() {
         playerName = Minecraft.getMinecraft().getSession().getUsername();
+        dataFullLoadedState = ThaumcraftHooks.isDataLoaded();
     }
 
     @Override
@@ -75,7 +79,7 @@ public class AspectFromItemStackHandler extends TemplateRecipeHandler {
                 int textureSize = 16;
                 float scaleFactor = 1.75F;
                 int x = GUI_WIDTH / 2;
-                int y = 35;
+                int y = 28;
                 GL11.glTranslatef(x, y, 0);
                 GL11.glScalef(scaleFactor, scaleFactor, 1.0F);
                 drawTexturedModalRect(-textureSize / 2, -textureSize / 2, 20, 3, 16, 16);
@@ -84,6 +88,12 @@ public class AspectFromItemStackHandler extends TemplateRecipeHandler {
             }
             GL11.glDisable(GL11.GL_BLEND);
         }
+
+        if (!ThaumcraftHooks.isDataLoaded()) {
+            drawString(I18n.format("tcneiadditions.aspect_from_itemstack.still_load", ThaumcraftHooks.getObjectsLoaded(), ThaumcraftHooks.getTotalToLoad()),
+                    2, 47, Color.GREEN.getRGB(), true);
+        }
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         changeTexture(BACKGROUND);
         drawTexturedModalRect(STACKS_OVERLAY_START_X, STACKS_OVERLAY_START_Y, 0, 0, STACKS_OVERLAY_WIDTH, STACKS_OVERLAY_HEIGHT);
@@ -98,6 +108,27 @@ public class AspectFromItemStackHandler extends TemplateRecipeHandler {
         return null;
     }
 
+    @Override
+    public void onUpdate() {
+        if (!dataFullLoadedState) {
+            if (ticks < -1) {
+                ticks = -1;
+            }
+
+            if (ticks % 200 == 0) {
+                if (!arecipes.isEmpty() && arecipes.get(0) instanceof AspectCachedRecipe) {
+                    boolean newLoadState = ThaumcraftHooks.isDataLoaded();
+                    AspectCachedRecipe first = ((AspectCachedRecipe) arecipes.get(0));
+                    List<ItemStack> fullList = findContainingItemStacks(first.aspect);
+                    first.initStackList(fullList);
+
+                    dataFullLoadedState = newLoadState;
+                }
+            }
+
+            ticks++;
+        }
+    }
 
     private List<ItemStack> findContainingItemStacks(Aspect aspect) {
         ArrayList<ItemStack> stacks = new ArrayList<>();
@@ -134,11 +165,13 @@ public class AspectFromItemStackHandler extends TemplateRecipeHandler {
 
     private class AspectCachedRecipe extends CachedRecipe {
         private static final int STACKS_COUNT = 36;
+        private Aspect aspect;
         private ItemStack aspectStack;
         private int start;
         private ItemStack[] localPageStacks;
         private List<PositionedStack> ingredients = null;
         private PositionedStack result = null;
+        private AspectCachedRecipe next = null;
 
         public AspectCachedRecipe(Aspect aspect, List<ItemStack> fullItemStackList) {
             this(aspect, fullItemStackList, 0);
@@ -146,21 +179,29 @@ public class AspectFromItemStackHandler extends TemplateRecipeHandler {
 
         private AspectCachedRecipe(Aspect aspect, List<ItemStack> fullItemStackList, int start) {
             this.start = start;
-            localPageStacks = getItemsInInterval(fullItemStackList);
+            this.aspect = aspect;
             this.aspectStack = new ItemStack(ModItems.itemAspect);
             ItemAspect.setAspect(aspectStack, aspect);
 
             arecipes.add(this);
+            initStackList(fullItemStackList);
+        }
 
-            if (start + STACKS_COUNT < fullItemStackList.size()) {//fixme
-                new AspectCachedRecipe(aspect, fullItemStackList, start + STACKS_COUNT);
+        private void initStackList(List<ItemStack> fullItemStackList) {
+            localPageStacks = getItemsInInterval(fullItemStackList);
+            ingredients = null;
+
+            if (next != null)
+                next.initStackList(fullItemStackList);
+            else if (start + STACKS_COUNT < fullItemStackList.size()) {
+                next = new AspectCachedRecipe(aspect, fullItemStackList, start + STACKS_COUNT);
             }
         }
 
         @Override
         public PositionedStack getResult() {
             if (result == null) {
-                result = new PositionedStack(aspectStack, GUI_WIDTH / 2 - 16 / 2, 27);
+                result = new PositionedStack(aspectStack, GUI_WIDTH / 2 - 16 / 2, 20);
             }
             return result;
         }

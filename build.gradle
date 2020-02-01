@@ -57,6 +57,13 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
+jar {
+    manifest {
+        attributes 'FMLCorePlugin': 'ru.timeconqueror.tcneiadditions.coremod.TCNAPlugin'
+        attributes 'FMLCorePluginContainsFMLMod': 'true'
+    }
+}
+
 processResources
         {
             // this will ensure that this task is redone when the versions change.
