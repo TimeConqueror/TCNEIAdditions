@@ -18,8 +18,8 @@ buildscript {
 apply plugin: 'forge'
 
 version = "1.7.10-1.0"
-group = "ru.timeconqueror.thaumcraftneifix" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "thaumcraftneifix"
+group = "ru.timeconqueror.tcneiadditions" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "Thaumcraft NEI Additions"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8

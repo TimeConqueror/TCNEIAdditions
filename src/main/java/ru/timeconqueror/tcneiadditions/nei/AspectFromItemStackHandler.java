@@ -142,10 +142,6 @@ public class AspectFromItemStackHandler extends TemplateRecipeHandler {
 
         public AspectCachedRecipe(Aspect aspect, List<ItemStack> fullItemStackList) {
             this(aspect, fullItemStackList, 0);
-
-            if (start + STACKS_COUNT < fullItemStackList.size()) {
-                new AspectCachedRecipe(aspect, fullItemStackList, start + STACKS_COUNT);
-            }
         }
 
         private AspectCachedRecipe(Aspect aspect, List<ItemStack> fullItemStackList, int start) {
@@ -155,6 +151,10 @@ public class AspectFromItemStackHandler extends TemplateRecipeHandler {
             ItemAspect.setAspect(aspectStack, aspect);
 
             arecipes.add(this);
+
+            if (start + STACKS_COUNT < fullItemStackList.size()) {//fixme
+                new AspectCachedRecipe(aspect, fullItemStackList, start + STACKS_COUNT);
+            }
         }
 
         @Override
