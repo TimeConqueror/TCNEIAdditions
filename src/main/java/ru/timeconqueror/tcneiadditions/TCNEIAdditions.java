@@ -16,7 +16,7 @@ import ru.timeconqueror.tcneiadditions.proxy.CommonProxy;
 public class TCNEIAdditions {
     public static final String MODID = "tcneiadditions";
     public static final String NAME = "Thaumcraft NEI Additions";
-    public static final String VERSION = "@VERSION@";
+    public static final String VERSION = "GRADLETOKEN_VERSION";
 
     public static final Logger LOGGER = LogManager.getLogger(NAME);
 

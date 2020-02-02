@@ -2,9 +2,9 @@
 {
   "modid": "tcneiadditions",
   "name": "Thaumcraft NEI Additions",
-  "description": "Fixes for NEI Plugin for Thaumcraft 4.",
-  "version": "1.7.10-1.0",
-  "mcversion": "1.7.10",
+  "description": "Improvements and fixes for Thaumcraft 4 NEI Plugin.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
   "authorList": [
