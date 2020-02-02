@@ -9,6 +9,8 @@ public class NEIConfig implements IConfigureNEI {
     @Override
     public void loadConfig() {
         API.registerRecipeHandler(new AspectFromItemStackHandler());
+        API.registerRecipeHandler(new AspectCombinationHandler());
+        API.registerUsageHandler(new AspectCombinationHandler());
     }
 
     @Override

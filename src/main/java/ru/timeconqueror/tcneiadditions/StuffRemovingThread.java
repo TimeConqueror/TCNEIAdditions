@@ -1,7 +1,9 @@
 package ru.timeconqueror.tcneiadditions;
 
 import codechicken.nei.NEIClientConfig;
+import codechicken.nei.recipe.GuiCraftingRecipe;
 import codechicken.nei.recipe.GuiUsageRecipe;
+import codechicken.nei.recipe.ICraftingHandler;
 import codechicken.nei.recipe.IUsageHandler;
 import com.djgiannuzz.thaumcraftneiplugin.nei.recipehandler.AspectRecipeHandler;
 import net.minecraft.util.Timer;
@@ -50,14 +52,21 @@ public class StuffRemovingThread extends Thread {
                 boolean configLoaded = (boolean) configLoadedField.get(null);
                 if (configLoaded) {
 
-                    Iterator<IUsageHandler> iterator = GuiUsageRecipe.usagehandlers.iterator();
-
-                    while (iterator.hasNext()) {
-                        IUsageHandler next = iterator.next();
+                    Iterator<ICraftingHandler> craftingIterator = GuiCraftingRecipe.craftinghandlers.iterator();
+                    while (craftingIterator.hasNext()) {
+                        ICraftingHandler next = craftingIterator.next();
                         if (next instanceof AspectRecipeHandler) {
+                            craftingIterator.remove();
+                            TCNEIAdditions.LOGGER.info("Crafting Recipes: found and removed standard " + AspectRecipeHandler.class.getSimpleName() + " from Thaumcraft NEI Plugin");
+                        }
+                    }
 
-                            iterator.remove();
-                            TCNEIAdditions.LOGGER.info("Found and removed standard Thaumcraft NEI Plugin Aspect Usage GuiRecipe.");
+                    Iterator<IUsageHandler> usageIterator = GuiUsageRecipe.usagehandlers.iterator();
+                    while (usageIterator.hasNext()) {
+                        IUsageHandler next = usageIterator.next();
+                        if (next instanceof AspectRecipeHandler) {
+                            usageIterator.remove();
+                            TCNEIAdditions.LOGGER.info("Usage Recipes: found and removed standard " + AspectRecipeHandler.class.getSimpleName() + " from Thaumcraft NEI Plugin");
                         }
                     }
 
