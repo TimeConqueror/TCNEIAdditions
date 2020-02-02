@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import ru.timeconqueror.tcneiadditions.TCNEIAdditions;
+import ru.timeconqueror.tcneiadditions.client.TCNAClient;
 import ru.timeconqueror.tcneiadditions.client.ThaumcraftHooks;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -27,12 +28,10 @@ import static codechicken.lib.gui.GuiDraw.*;
 public class AspectFromItemStackHandler extends TemplateRecipeHandler {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(TCNEIAdditions.MODID, "textures/gui/itemstack_background.png");
     private static final ResourceLocation THAUM_OVERLAYS = new ResourceLocation(Thaumcraft.MODID.toLowerCase(), "textures/gui/gui_researchbook_overlay.png");
-    private static final int GUI_WIDTH = 166;
-    private static final int GUI_HEIGHT = 131;
     private static final int STACKS_OVERLAY_WIDTH = 163;
     private static final int STACKS_OVERLAY_HEIGHT = 74;
-    private static final int STACKS_OVERLAY_START_X = GUI_WIDTH / 2 - STACKS_OVERLAY_WIDTH / 2;
-    private static final int STACKS_OVERLAY_START_Y = GUI_HEIGHT - STACKS_OVERLAY_HEIGHT;
+    private static final int STACKS_OVERLAY_START_X = TCNAClient.NEI_GUI_WIDTH / 2 - STACKS_OVERLAY_WIDTH / 2;
+    private static final int STACKS_OVERLAY_START_Y = TCNAClient.NEI_GUI_HEIGHT - STACKS_OVERLAY_HEIGHT;
     private String playerName;
     private int ticks;
     private boolean dataFullLoadedState;
@@ -78,7 +77,7 @@ public class AspectFromItemStackHandler extends TemplateRecipeHandler {
             {
                 int textureSize = 16;
                 float scaleFactor = 1.75F;
-                int x = GUI_WIDTH / 2;
+                int x = TCNAClient.NEI_GUI_WIDTH / 2;
                 int y = 28;
                 GL11.glTranslatef(x, y, 0);
                 GL11.glScalef(scaleFactor, scaleFactor, 1.0F);
@@ -166,11 +165,10 @@ public class AspectFromItemStackHandler extends TemplateRecipeHandler {
     private class AspectCachedRecipe extends CachedRecipe {
         private static final int STACKS_COUNT = 36;
         private Aspect aspect;
-        private ItemStack aspectStack;
         private int start;
         private ItemStack[] localPageStacks;
         private List<PositionedStack> ingredients = null;
-        private PositionedStack result = null;
+        private PositionedStack result;
         private AspectCachedRecipe next = null;
 
         public AspectCachedRecipe(Aspect aspect, List<ItemStack> fullItemStackList) {
@@ -180,8 +178,10 @@ public class AspectFromItemStackHandler extends TemplateRecipeHandler {
         private AspectCachedRecipe(Aspect aspect, List<ItemStack> fullItemStackList, int start) {
             this.start = start;
             this.aspect = aspect;
-            this.aspectStack = new ItemStack(ModItems.itemAspect);
+
+            ItemStack aspectStack = new ItemStack(ModItems.itemAspect);
             ItemAspect.setAspect(aspectStack, aspect);
+            result = new PositionedStack(aspectStack, TCNAClient.NEI_GUI_WIDTH / 2 - 16 / 2, 20);
 
             arecipes.add(this);
             initStackList(fullItemStackList);
@@ -200,9 +200,6 @@ public class AspectFromItemStackHandler extends TemplateRecipeHandler {
 
         @Override
         public PositionedStack getResult() {
-            if (result == null) {
-                result = new PositionedStack(aspectStack, GUI_WIDTH / 2 - 16 / 2, 20);
-            }
             return result;
         }
 
@@ -211,8 +208,8 @@ public class AspectFromItemStackHandler extends TemplateRecipeHandler {
             if (ingredients == null) {
                 ingredients = new ArrayList<>(localPageStacks.length);
                 for (int i = 0; i < localPageStacks.length; i++) {
-                    int x = STACKS_OVERLAY_START_X + i % 9 * (16 + 2);
-                    int y = STACKS_OVERLAY_START_Y + i / 9 * (16 + 2);
+                    int x = STACKS_OVERLAY_START_X + 1 /*small offset from top like in vanilla */ + i % 9 * (16 + 2);
+                    int y = STACKS_OVERLAY_START_Y + 1 /*small offset from top like in vanilla */ + i / 9 * (16 + 2);
                     ItemStack stack = localPageStacks[i];
                     ingredients.add(new PositionedStack(stack, x, y));
                 }

@@ -16,6 +16,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
 public class TCNAClient {
+    public static final int NEI_TEXT_COLOR = 0x404040;
+    public static final int NEI_RECIPE_HEIGHT = 65;
+    public static final int NEI_GUI_WIDTH = 166;
+    public static final int NEI_GUI_HEIGHT = 131;
+
     private static final TCNAClient instance = new TCNAClient();
     private final Queue<FutureTask<?>> tasks = Queues.newArrayDeque();
 
