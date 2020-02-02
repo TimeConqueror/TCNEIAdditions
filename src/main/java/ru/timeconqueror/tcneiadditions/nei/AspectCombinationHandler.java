@@ -5,12 +5,14 @@ import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.djgiannuzz.thaumcraftneiplugin.ModItems;
 import com.djgiannuzz.thaumcraftneiplugin.items.ItemAspect;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.ArrayUtils;
 import ru.timeconqueror.tcneiadditions.client.DrawUtils;
 import ru.timeconqueror.tcneiadditions.client.TCNAClient;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.common.Thaumcraft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +38,11 @@ public class AspectCombinationHandler extends TemplateRecipeHandler {
     @Override
     public void loadCraftingRecipes(ItemStack result) {
         if (result.getItem() instanceof ItemAspect) {
-            new AspectCombinationRecipe(result);
+            Aspect aspect = ItemAspect.getAspects(result).getAspects()[0];
+            if (Thaumcraft.proxy.playerKnowledge.hasDiscoveredAspect(Minecraft.getMinecraft().getSession().getUsername(), aspect)) {
+                new AspectCombinationRecipe(result);
+            }
         }
-    }
-
-    @Override
-    public List<PositionedStack> getIngredientStacks(int recipe) {
-        return super.getIngredientStacks(recipe);
     }
 
     @Override
@@ -50,12 +50,14 @@ public class AspectCombinationHandler extends TemplateRecipeHandler {
         if (ingredient.getItem() instanceof ItemAspect) {
             Aspect aspect = ItemAspect.getAspects(ingredient).getAspects()[0];
 
-            for (Aspect compoundAspect : Aspect.getCompoundAspects()) {
-                if (ArrayUtils.contains(compoundAspect.getComponents(), aspect)) {
-                    ItemStack result = new ItemStack(ModItems.itemAspect);
-                    ItemAspect.setAspect(result, compoundAspect);
+            if (Thaumcraft.proxy.playerKnowledge.hasDiscoveredAspect(Minecraft.getMinecraft().getSession().getUsername(), aspect)) {
+                for (Aspect compoundAspect : Aspect.getCompoundAspects()) {
+                    if (ArrayUtils.contains(compoundAspect.getComponents(), aspect)) {
+                        ItemStack result = new ItemStack(ModItems.itemAspect);
+                        ItemAspect.setAspect(result, compoundAspect);
 
-                    new AspectCombinationRecipe(result);
+                        new AspectCombinationRecipe(result);
+                    }
                 }
             }
         }
