@@ -95,9 +95,9 @@ public class AspectCombinationHandler extends TemplateRecipeHandler {
 
             int startY = calculateOffsetY(recipeIndex, SPACE_DECREASE);// in case of NEI uses not changeable recipe height (=65), so this allows to the space between recipes to be reduced visually.
 
-            aspectStack = aspectStack.copy();
-            aspectStack.stackSize = 1;
             Aspect aspect = ItemAspect.getAspects(aspectStack).getAspects()[0];
+            aspectStack = new ItemStack(ModItems.itemAspect);
+            ItemAspect.setAspect(aspectStack, aspect);
 
             if (aspect.isPrimal()) {
                 this.result = new PositionedStack(aspectStack, TCNAClient.NEI_GUI_WIDTH / 2 - 16 / 2, startY + 6);
