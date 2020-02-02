@@ -25,7 +25,7 @@ file "build.properties" withReader {
 
 version = "1.7.10-${config.project.version}"
 group = "ru.timeconqueror.tcneiadditions" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Thaumcraft NEI Additions"
+archivesBaseName = "Thaumcraft-NEI-Additions"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
