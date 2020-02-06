@@ -6,8 +6,13 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListenableFutureTask;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.NotNull;
+import ru.timeconqueror.tcneiadditions.TCNEIAdditions;
+import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.common.lib.crafting.ArcaneSceptreRecipe;
+import thaumcraft.common.lib.crafting.ArcaneWandRecipe;
 
 import java.util.Queue;
 import java.util.concurrent.Callable;
@@ -23,9 +28,29 @@ public class TCNAClient {
 
     private static final TCNAClient instance = new TCNAClient();
     private final Queue<FutureTask<?>> tasks = Queues.newArrayDeque();
+    /**
+     * Detects if any mod turned off ArcaneWandRecipes by deleting them.
+     */
+    private Boolean wandRecipesDeleted = null;
 
     public static TCNAClient getInstance() {
         return instance;
+    }
+
+    @SubscribeEvent
+    public void onPlayerEntered(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+        wandRecipesDeleted = true;
+
+        for (Object craftingRecipe : ThaumcraftApi.getCraftingRecipes()) {
+            if (craftingRecipe instanceof ArcaneWandRecipe || craftingRecipe instanceof ArcaneSceptreRecipe) {
+                wandRecipesDeleted = false;
+                break;
+            }
+        }
+
+        if (wandRecipesDeleted) {
+            TCNEIAdditions.LOGGER.info("Detected removing of ArcaneWandRecipe and ArcaneSceptreRecipe by another mod. Applying NEI Wand Recipe searching by ShapedArcaneRecipes...");
+        }
     }
 
     @SubscribeEvent
@@ -71,5 +96,9 @@ public class TCNAClient {
 
     public boolean isMainThread() {
         return Minecraft.getMinecraft().func_152345_ab();
+    }
+
+    public boolean areWandRecipesDeleted() {
+        return wandRecipesDeleted;
     }
 }
