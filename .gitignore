@@ -3,3 +3,7 @@
 /out/
 /eclipse/
 /.idea/
+*.bat
+TC-Nei_Addon.iml
+TC-Nei_Addon.ipr
+TC-Nei_Addon.iws
