@@ -1,5 +1,7 @@
 # TCNEIAdditions
 Mod that improves and fixes Thaumcraft NEI Plugin.
+<br>
+&#x1F534; <span>**Requires SpongeMixins as a dependency (https://github.com/TimeConqueror/SpongeMixins)**</span>
 
 ## Provided features:
 * Rewrited Aspect-from-ItemStack Recipe. It is usable now, improved and doesn't cause lags. Can be accessed by pressing R on aspect in NEI.
