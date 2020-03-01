@@ -89,7 +89,7 @@ public class AspectFromItemStackHandler extends TemplateRecipeHandler {
         }
 
         if (!ThaumcraftHooks.isDataLoaded()) {
-            drawString(I18n.format("tcneiadditions.aspect_from_itemstack.still_load", ThaumcraftHooks.getObjectsLoaded(), ThaumcraftHooks.getTotalToLoad()),
+            drawString(I18n.format("tcneiadditions.aspect_from_itemstack.still_load", ThaumcraftHooks.getItemsLoaded(), ThaumcraftHooks.getTotalToLoad()),
                     2, 47, Color.GREEN.getRGB(), true);
         }
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

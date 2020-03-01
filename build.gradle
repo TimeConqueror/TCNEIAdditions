@@ -15,6 +15,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.github.johnrengelman.shadow" version "1.2.3"
+}
+
 apply plugin: 'forge'
 
 file "build.properties" withReader {
@@ -22,7 +26,7 @@ file "build.properties" withReader {
     prop.load(it)
     ext.config = new ConfigSlurper().parse prop
 }
-
+//--tweakClass org.spongepowered.asm.launch.MixinTweaker --mixin mixins.tcneiadditions.json
 version = "1.7.10-${config.project.version}"
 group = "ru.timeconqueror.tcneiadditions" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Thaumcraft-NEI-Additions"
@@ -44,6 +48,10 @@ repositories {
         name = "chickenbones"
         url = "http://chickenbones.net/maven"
     }
+    maven {
+        name = "sponge"
+        url = "http://repo.spongepowered.org/maven/"
+    }
 }
 
 dependencies {
@@ -53,32 +61,29 @@ dependencies {
     compile "codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev"
 
     compile 'org.jetbrains:annotations:18.0.0'
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
 
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    compile('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
+        // Mixin includes a lot of dependencies that are too up-to-date
+        exclude module: 'launchwrapper'
+        exclude module: 'guava'
+        exclude module: 'gson'
+        exclude module: 'commons-io'
+        exclude module: 'log4j-core'
+    }
 }
 
 jar {
     manifest {
-        attributes 'FMLCorePlugin': 'ru.timeconqueror.tcneiadditions.coremod.TCNAPlugin'
-        attributes 'FMLCorePluginContainsFMLMod': 'true'
+        attributes([
+                "TweakClass": "shaded.org.spongepowered.asm.launch.MixinTweaker",
+                'FMLCorePluginContainsFMLMod': 'true',
+                "ForceLoadAsMod": true,
+                'MixinConfigs': 'mixins.tcneiadditions.json'
+        ])
     }
 }
 
 processResources {
-    def cleanVersion = ""
-    def versionArray = project.version.tokenize('-')
-    cleanVersion = versionArray.get(1)
-
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -94,5 +99,36 @@ processResources {
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+def refMap = "${tasks.compileJava.temporaryDir}" + File.separator + "mixins.tcneiadditions.refmap.json"
+shadowJar {
+    classifier = ""
+    configurations = []
+    relocate "org.spongepowered", "shaded.org.spongepowered"
+
+    from refMap
+}
+tasks.jar.finalizedBy(shadowJar)
+
+/************************************************************
+ * Configure reobfuscation
+ */
+
+def mixinSrg = "${tasks.reobf.temporaryDir}" + File.separator + "mixins.srg"
+
+reobf {
+    addExtraSrgFile mixinSrg
+}
+
+afterEvaluate {
+    tasks.compileJava.options.compilerArgs += ["-AreobfSrgFile=${tasks.reobf.srg}", "-AoutSrgFile=${mixinSrg}", "-AoutRefMapFile=${refMap}"]
+}
+
+sourceSets {
+    main {
+        output.resourcesDir = output.classesDir
+        ext.refMap = "mixins.tcneiadditions.refmap.json"
     }
 }

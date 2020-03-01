@@ -20,6 +20,8 @@ import java.util.List;
 public class AspectCombinationHandler extends TemplateRecipeHandler {
     private static final int SPACE_DECREASE = -25;
 
+    private String userName = Minecraft.getMinecraft().getSession().getUsername();
+
     @Override
     public String getGuiTexture() {
         return null;
@@ -39,7 +41,7 @@ public class AspectCombinationHandler extends TemplateRecipeHandler {
     public void loadCraftingRecipes(ItemStack result) {
         if (result.getItem() instanceof ItemAspect) {
             Aspect aspect = ItemAspect.getAspects(result).getAspects()[0];
-            if (Thaumcraft.proxy.playerKnowledge.hasDiscoveredAspect(Minecraft.getMinecraft().getSession().getUsername(), aspect)) {
+            if (Thaumcraft.proxy.playerKnowledge.hasDiscoveredAspect(userName, aspect)) {
                 new AspectCombinationRecipe(result);
             }
         }
@@ -52,7 +54,7 @@ public class AspectCombinationHandler extends TemplateRecipeHandler {
 
             if (Thaumcraft.proxy.playerKnowledge.hasDiscoveredAspect(Minecraft.getMinecraft().getSession().getUsername(), aspect)) {
                 for (Aspect compoundAspect : Aspect.getCompoundAspects()) {
-                    if (ArrayUtils.contains(compoundAspect.getComponents(), aspect)) {
+                    if (ArrayUtils.contains(compoundAspect.getComponents(), aspect) && Thaumcraft.proxy.playerKnowledge.hasDiscoveredAspect(userName, compoundAspect)) {
                         ItemStack result = new ItemStack(ModItems.itemAspect);
                         ItemAspect.setAspect(result, compoundAspect);
 

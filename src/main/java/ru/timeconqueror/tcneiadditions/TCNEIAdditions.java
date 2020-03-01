@@ -12,7 +12,7 @@ import ru.timeconqueror.tcneiadditions.proxy.CommonProxy;
 @Mod(modid = TCNEIAdditions.MODID,
         name = TCNEIAdditions.NAME,
         version = TCNEIAdditions.VERSION,
-        dependencies = "required-after:Thaumcraft;required-after:thaumcraftneiplugin")
+        dependencies = "required-after:Thaumcraft;required-after:thaumcraftneiplugin;required-after:spongemixins;")
 public class TCNEIAdditions {
     public static final String MODID = "tcneiadditions";
     public static final String NAME = "Thaumcraft NEI Additions";

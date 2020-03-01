@@ -4,14 +4,14 @@ import org.jetbrains.annotations.ApiStatus;
 
 public class ThaumcraftHooks {
     private static int totalToLoad;
-    private static int objectsLoaded;
+    private static int itemsLoaded;
     private static boolean allDataLoaded;
 
     /**
      * Internal. Do not use.
      */
     @ApiStatus.Internal
-    public static void onItemStackAspectDataLoaded() {
+    public static void setAllDataLoaded() {
         allDataLoaded = true;
     }
 
@@ -19,12 +19,12 @@ public class ThaumcraftHooks {
      * Internal. Do not use.
      */
     @ApiStatus.Internal
-    public static void incrementLoadedObjects() {
-        objectsLoaded++;
+    public static void incrementLoadedItems() {
+        itemsLoaded++;
     }
 
-    public static int getObjectsLoaded() {
-        return objectsLoaded;
+    public static int getItemsLoaded() {
+        return itemsLoaded;
     }
 
     public static int getTotalToLoad() {
